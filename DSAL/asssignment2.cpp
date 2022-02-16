@@ -41,6 +41,7 @@ class BST
    void insert(string w,string m);
    Node* search(string w);
    void display(Node *p);//inorder display for ascending order display
+   void create();
 };
 Node *BST::search(string w)
 {
@@ -78,7 +79,8 @@ void BST::insert(string w,string m)
   {
       r=t;
       if(p->word==w)
-      {
+      {   
+          cout<<"Duplicate found!";
           return ;
       }
       else if(p->word >w)
@@ -111,12 +113,33 @@ void BST::display(Node *p)
         display(p->rchild);
     }
 }
+void BST::create()
+{
+  int n;
+  string word;
+  string meaning;
+  cout<<"Enter the number of words to be inserted: "<<endl;
+  cin>>n;
+  for (int i=0;i<=n;i++)
+  {
+      cout<<"Enter a word: ";
+      cin>>word;
+      cout<<"Enter its corresponding meaning: ";
+      cin>>meaning;
+      insert(word,meaning);
+  }
+}
 int main()
 {   
-    BST obj;
-    obj.insert("a","abcd");
-    obj.insert("b","bcdde");
-    obj.display(obj.getRoot());
-    return 0;
+   string word;
+   string meaning;
+   BST dictionary;
+   
+   dictionary.create();
+   //dictionary.display(dictionary.getRoot());
+   cout<<"Enter the word to be searched";
+   cin>>word;
+   dictionary.search(word);
+
 
 }
