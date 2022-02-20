@@ -39,29 +39,34 @@ class BST
        return root;
    }
    void insert(string w,string m);
-   Node* search(string w);
+   void search(string w);
    void display(Node *p);//inorder display for ascending order display
    void create();
+   void reversedDisplay(Node *p);
 };
-Node *BST::search(string w)
+void BST::search(string w)
 {
   Node *p=root;
+  int count=0;
   while(p!=nullptr)
   {
       if(p->word==w)
       {
-          return p;
+         cout<<"Word found! the meaning of the entered word is : "<<p->meaning<<endl;
+          break; 
       }
       else if(p->word < w)
       {
           p=p->rchild;
+          count++;
       }
       else if(p->word > w)
       {
           p=p->lchild;
+          count++;
       }
   }
-  return nullptr;
+ cout<<"The number of comparisons taken to the find the entered word were: "<<count;
 }
 void BST::insert(string w,string m)
 {
@@ -71,25 +76,23 @@ void BST::insert(string w,string m)
   if(root==nullptr)
   {
       p=new Node(w,m);
-      p->lchild=p->rchild=nullptr;
-      root=p;
       return ;
   }
   while(t!=nullptr)
   {
       r=t;
-      if(p->word==w)
+      if(t->word==w)
       {   
           cout<<"Duplicate found!";
           return ;
       }
-      else if(p->word >w)
+      else if(t->word >w)
       {
-          p=p->lchild;
+          t=t->lchild;
       }
-      else if(p->word < w)
+      else if(t->word < w)
       {
-          p=p->rchild;
+          t=t->rchild;
       }
   }
  p=new Node(w,m);
@@ -112,6 +115,17 @@ void BST::display(Node *p)
         cout<<p->word<<" ";
         display(p->rchild);
     }
+    cout<<endl;
+}
+void BST::reversedDisplay(Node *p)
+{
+    if(p)
+    {
+        display(p->rchild);
+        cout<<p->word<<" ";
+        display(p->lchild);
+    }
+    cout<<endl;
 }
 void BST::create()
 {
