@@ -43,7 +43,7 @@ class BST
    void display(Node *p);//inorder display for ascending order display
    void create();
    void reversedDisplay(Node *p);
-   void deleteword(Node *,string word);
+   void deleteword(Node *p,string word);
    Node *inorder_succ(Node *p);
 };
 void BST::search(string w)
@@ -68,16 +68,16 @@ void BST::search(string w)
           count++;
       }
   }
- cout<<"The number of comparisons taken to the find the entered word were: "<<count;
+ cout<<"The number of comparisons taken to the find the entered word were: "<<count<<endl;
 }
 void BST::insert(string w,string m)
 {
   Node *t=root;
   Node *p;
   Node *r;
-  if(t==nullptr)
+  if(root==nullptr)
   {
-      t=new Node(w,m);
+      root=new Node(w,m);
       return ;
   }
   while(t!=nullptr)
@@ -112,7 +112,7 @@ void BST::display(Node *p)
     if(p)
     {
         display(p->lchild);
-        cout<<p->word<<" :"<<p->meaning;
+        cout<<p->word<<":"<<p->meaning;
         display(p->rchild);
     }
     cout<<endl;
@@ -122,7 +122,7 @@ void BST::reversedDisplay(Node *p)
     if(p)
     {
         display(p->rchild);
-        cout<<p->word<<" :"<<p->meaning;
+        cout<<p->word<<":"<<p->meaning;
         display(p->lchild);
     }
     cout<<endl;
@@ -167,6 +167,7 @@ void BST::deleteword(Node *t,string w)
       {
           Node *copynode=inorder_succ(t);
           copynode->word=t->word;
+          copynode->meaning=t->meaning;
           deleteword(t->lchild,copynode->word);
       }
       else 
@@ -174,7 +175,7 @@ void BST::deleteword(Node *t,string w)
           Node *child=(t->lchild)?(t->lchild):(t->rchild);
           Node *current=t;
           t=child;
-          cout<<t->word<<" is deleted!"<<endl;
+          cout<<w<<" is deleted!"<<endl;
           delete current;  
       }
   }
@@ -203,16 +204,21 @@ int main()
    BST dictionary;
    
    dictionary.create();
-    cout<<"************************"<<endl;
+   cout<<"************************"<<endl;
    cout<<"Created dictionary is: "<<endl;
-//    cout<<"************************"<<endl;
+   cout<<"Ascending order: "<<endl;
    dictionary.display(dictionary.getRoot());
-   cout<<"Enter the word to be searched :";
+   cout<<"Descending order :"<<endl;
+   dictionary.reversedDisplay(dictionary.getRoot());
+   cout<<"************************"<<endl;
+   cout<<"Enter the word to be searched :"<<endl;
    cin>>word;
    dictionary.search(word);
-//    cout<<"Enter the word to be deleted: "<<endl;
-//    cin>>word2;
-//    dictionary.deleteword(dictionary.getRoot(),word2);
+   cout<<"Enter the word to be deleted: "<<endl;
+   cin>>word2;
+   dictionary.deleteword(dictionary.getRoot(),word2);
+   cout<<"Dictionary: "<<endl;
+   dictionary.display(dictionary.getRoot());
   return 0;
 
 }
