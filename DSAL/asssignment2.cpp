@@ -45,16 +45,20 @@ class BST
    void reversedDisplay(Node *p);
    void deleteword(Node *p,string word);
    Node *inorder_succ(Node *p);
+   void updateword(string w);
 };
 void BST::search(string w)
 {
   Node *p=root;
   int count=0;
+  if(p==nullptr)
+      return ;
   while(p!=nullptr)
   {
       if(p->word==w)
       {
          cout<<"Word found! the meaning of the entered word is : "<<p->meaning<<endl;
+          count++;
           break; 
       }
       else if(p->word < w)
@@ -85,7 +89,7 @@ void BST::insert(string w,string m)
       r=t;
       if(t->word==w)
       {   
-          cout<<"Duplicate found!";
+          cout<<"Word is already present in the dictionary !!";
           return ;
       }
       else if(t->word >w)
@@ -179,7 +183,7 @@ void BST::deleteword(Node *t,string w)
           delete current;  
       }
   }
-  }
+}
 void BST::create()
 {
   int n;
@@ -196,29 +200,90 @@ void BST::create()
       insert(word,meaning);
   }
 }
+void BST::updateword(string w)
+{
+    Node *p=root;
+    string updatemeaning;
+    while(p!=nullptr)
+    {
+        if(p->word==w)
+        {
+            cout<<"Enter the meaning of the word you want to update to: "<<endl;
+            cin>>updatemeaning;
+            p->meaning=updatemeaning;
+            cout<<"Word meaning updated in the dictionary!!"<<endl;
+            display(getRoot());
+            break;
+        }
+        else if(p->word <w)
+        {
+            p=p->rchild;
+        }
+        else
+        {
+            p=p->lchild;
+        }
+    }
+}
 int main()
 {   
    string word;
    string word2;
+   string word3;
    string meaning;
    BST dictionary;
-   
-   dictionary.create();
-   cout<<"************************"<<endl;
-   cout<<"Created dictionary is: "<<endl;
-   cout<<"Ascending order: "<<endl;
-   dictionary.display(dictionary.getRoot());
-   cout<<"Descending order :"<<endl;
-   dictionary.reversedDisplay(dictionary.getRoot());
-   cout<<"************************"<<endl;
-   cout<<"Enter the word to be searched :"<<endl;
-   cin>>word;
-   dictionary.search(word);
-   cout<<"Enter the word to be deleted: "<<endl;
-   cin>>word2;
-   dictionary.deleteword(dictionary.getRoot(),word2);
-   cout<<"Dictionary: "<<endl;
-   dictionary.display(dictionary.getRoot());
-  return 0;
+   int ch;
+   do{
+   cout<<"******** MENU **********"<<endl;
+   cout<<"1. Create dictionary "<<endl;
+   cout<<"2. Display the dictionary in ascending order"<<endl;
+   cout<<"3. Display the dictionary in descending order "<<endl;
+   cout<<"4. Search a meaning in the dictionary "<<endl;
+   cout<<"5. Delete a word in the dictionary"<<endl;
+   cout<<"6. Update a word in the dictionary"<<endl;
+   cout<<"7. Exit "<<endl;
+   cout<<"Enter your choice:";
+   cin>>ch;
+   switch (ch)
+   {
+      case 1:
+      cout<<"*******DICTIONARY*****"<<endl;
+      dictionary.create();
+      break;
 
+      case 2:
+      cout<<"Displaying the dictionary in ascending order :"<<endl;
+      dictionary.display(dictionary.getRoot());
+      break;
+
+      case 3:
+      cout<<"Displaying the dictionary in descending order :"<<endl;
+      dictionary.reversedDisplay(dictionary.getRoot());
+      break;
+
+      case 4:
+      cout<<"Enter the word whose meaning you want to find in the dictionary :"<<endl;
+      cin>>word;
+      dictionary.search(word);
+      break;
+
+      case 5:
+      cout<<"Enter the word that is to be deleted from the dicionary : "<<endl;
+      cin>>word2;
+      dictionary.deleteword(dictionary.getRoot(), word2);
+      break;
+
+      case 6:
+      cout<<"Enter the word whose meaning is to be updated :"<<endl;
+      cin>>word3;
+      dictionary.updateword(word3);
+      break;
+
+      case 7:
+      cout<<"Exiting...."<<endl;
+      break;
+   }
+   }
+   while(ch!=7);
+  return 0;
 }
