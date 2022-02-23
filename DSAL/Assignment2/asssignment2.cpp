@@ -43,8 +43,9 @@ class BST
    void display(Node *p);//inorder display for ascending order display
    void create();
    void reversedDisplay(Node *p);
-   void deleteword(Node *p,string word);
+   Node *deleteword(Node *p,string word);
    Node *inorder_succ(Node *p);
+   void updatemeaning(string w);
    void updateword(string w);
 };
 void BST::search(string w)
@@ -141,7 +142,7 @@ Node *BST::inorder_succ(Node *p)//here p is the node that is to be deleted
     return child;
     //child will be pointing at the inorder succesor now
 }
-void BST::deleteword(Node *t,string w)
+Node* BST::deleteword(Node *t,string w)
 {
   //Node *t=root;
   Node *p;
@@ -149,15 +150,15 @@ void BST::deleteword(Node *t,string w)
   if(root==nullptr)
   {
       cout<<"No node to delete!"<<endl;
-      return ;
+      return nullptr;
   }
   if(w < t->word)
   {
-    deleteword(t->lchild,w);
+    t->lchild=deleteword(t->lchild,w);
   }
   else if(w> t->word)
   {
-      deleteword(t->rchild,w);
+      t->rchild=deleteword(t->rchild,w);
   }
   else// the word is found
   {
@@ -166,23 +167,38 @@ void BST::deleteword(Node *t,string w)
           cout<<t->word<<" is deleted!"<<endl;
           delete t;
           t=nullptr;
+          return nullptr;
       }
       else if(t->lchild && t->rchild)
       {
           Node *copynode=inorder_succ(t);
           copynode->word=t->word;
           copynode->meaning=t->meaning;
-          deleteword(t->lchild,copynode->word);
+          t=deleteword(t,copynode->word);
       }
       else 
       {
-          Node *child=(t->lchild)?(t->lchild):(t->rchild);
-          Node *current=t;
-          t=child;
-          cout<<w<<" is deleted!"<<endl;
-          delete current;  
+        //   Node *child=(t->lchild)?(t->lchild):(t->rchild);
+        //   Node *current=t;
+        //   t=child;
+        //   cout<<w<<" is deleted!"<<endl;
+        //   delete current;  
+        if(t->lchild==nullptr)
+        {
+          Node *temp=t->rchild;
+          delete t;
+          return temp;
+        }
+        else
+        {
+            Node *temp=t->lchild;
+            delete t;
+            return temp;
+        }
+        cout<<t->word<<" is deleted!"<<endl;
       }
   }
+  return t;
 }
 void BST::create()
 {
@@ -200,7 +216,7 @@ void BST::create()
       insert(word,meaning);
   }
 }
-void BST::updateword(string w)
+void BST::updatemeaning(string w)
 {
     Node *p=root;
     string updatemeaning;
@@ -225,11 +241,32 @@ void BST::updateword(string w)
         }
     }
 }
+void BST::updateword(string w)
+{
+	string newword;
+	string newmeaning;
+	/*
+	 * 1.search the keyword
+	 * 2.Delete the keyword
+	 * 3.accept the new word
+	 * 4.insert the new keyword
+	 */
+	deleteword(getRoot(),w);
+	cout<<"Enter the new word to be inserted :";
+	cin>>newword;
+	cout<<"Enter the new meaning to be inserted :";
+    cin>>newmeaning;
+	insert(newword,newmeaning);
+	display(getRoot());
+	cout<<"New word added !"<<endl;
+
+}
 int main()
 {   
    string word;
    string word2;
    string word3;
+   string word4;
    string meaning;
    BST dictionary;
    int ch;
@@ -241,7 +278,8 @@ int main()
    cout<<"4. Search a meaning in the dictionary "<<endl;
    cout<<"5. Delete a word in the dictionary"<<endl;
    cout<<"6. Update a word in the dictionary"<<endl;
-   cout<<"7. Exit "<<endl;
+   cout<<"7. Update a word in the dictionary"<<endl;
+   cout<<"8. Exit "<<endl;
    cout<<"Enter your choice:";
    cin>>ch;
    switch (ch)
@@ -276,14 +314,20 @@ int main()
       case 6:
       cout<<"Enter the word whose meaning is to be updated :"<<endl;
       cin>>word3;
-      dictionary.updateword(word3);
+      dictionary.updatemeaning(word3);
       break;
 
       case 7:
-      cout<<"Exiting...."<<endl;
+      cout<<"Enter the word to be updated :"<<endl;
+      cin>>word4;
+      dictionary.updateword(word4);
+      break;
+      
+      case 8:
+      cout<<"Exiting..."<<endl;
       break;
    }
    }
-   while(ch!=7);
+   while(ch!=8);
   return 0;
 }
