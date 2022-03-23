@@ -25,7 +25,6 @@ public:
 		data=x;
 		lchild=rchild=nullptr;
 	    lflag=rflag=false;
-
 	}
 	friend class TBT;
 };
@@ -59,13 +58,13 @@ void TBT::insert(int key)
 		{
 			while(true)
 			{
-					if(p->data >key)
+					if(p->data >key)//modify the left child of the tree
 					{
-						if(p->lflag==1)
+						if(p->lflag==1)// the left child of the tree is a node 
 						{
 							p=p->lchild;
 						}
-						else
+						else //is a thread
 						{
 							Node *temp=new Node(key);
 							temp->lchild=p->lchild;
@@ -74,7 +73,7 @@ void TBT::insert(int key)
 							p->lflag=1;
 						}
 					}
-					else
+					else //modify the right child of the tree
 					{
 						if(p->lflag==1)
 						{
@@ -131,3 +130,4 @@ int main()
  first.display();
  return 0;
 }
+
