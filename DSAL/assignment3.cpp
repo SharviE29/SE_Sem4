@@ -93,6 +93,7 @@ void TBT::insert(int key)
 	}
 }
 
+
 void TBT::display()//inorder display
 {
   Node *p=root;
