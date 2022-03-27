@@ -109,6 +109,7 @@ void TelephoneDict::searchRecord(long long int n)
         index=(index+1)%size;
         collisionCount++;
     } while (index!=hashfunction(n));
+    cout<<"The number of collisions that took place were : "<<collisionCount<<endl;
 }
 
 void TelephoneDict::updateRecord(long long int n)
