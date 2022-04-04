@@ -75,7 +75,7 @@ void TBT::insert(int key)
 					}
 					else //modify the right child of the tree
 					{
-						if(p->lflag==1)
+						if(p->rflag==1)
 						{
 								p=p->rchild;
 						}
