@@ -8,6 +8,8 @@ Find(key), Delete(key)
 
 #include <iostream>
 #include<string>
+#include<cstdlib>
+#include<cmath>
 using namespace std;
 #define size 20
 class HashEntryNode{
@@ -48,10 +50,10 @@ public:
 		int result;
 		for(int i=0;i<word.length();i++)
 		{   
-			result=(97-int(word[i])*(i+1));
+			result=labs(97-int(word[i])*(i+1)); //long absolute value in c++
 			sum=sum+result;
 		}
-		return sum;
+		return sum%size;
 	}
 	void insert(string,string);
     string search(string);
@@ -133,5 +135,6 @@ int main() {
 	
     Dictionary d;
     d.insert("hello","hi");
+    d.display();
 	return 0;
 }
