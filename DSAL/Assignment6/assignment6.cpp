@@ -154,7 +154,7 @@ int main() {
 	Graph g(v,e);
 	do
 	{
-		cout<<"******MENU******\n1.Accept graph\n2.Display graph\n3.BFS\n4.DFS\n5.Exit\n";
+		cout<<"******MENU******\n1.Accept graph\n2.Display graph\n3.BFS\n4.DFS\n5.Exit\nEnter you choice\n";
 		cin>>ch;
 		switch(ch)
 		{
