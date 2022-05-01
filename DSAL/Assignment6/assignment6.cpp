@@ -71,14 +71,13 @@ public:
 		   }
 	   }
 	}
-
 	void BFS(int);
 	void DFS(int);
 };
 
 void Graph::BFS(int startver)
 {
-  Queue q;
+  Queue q(1000);
   int *visited=new int[vernum];
   for(int i=0;i<vernum;i++)
 	  {
@@ -100,36 +99,35 @@ void Graph::BFS(int startver)
 		  }
 		  temp=temp->next;
 	  }
-
   }
+  cout<<endl;
 }
 void Graph::DFS(int startver)
 {
-  Stack s;
-  int *visited=new int[vernum];
+  Stack s(1000);
+  int *visitednew=new int[vernum];
   for(int i=0;i<vernum;i++)
 	  {
-	     visited[i]=0;
+	     visitednew[i]=0;
 	  }
-  visited[startver]=1;
+  visitednew[startver]=1;
   s.push(startver);
   while(!s.isEmpty())
   {
 	  int v=s.pop();
 	  cout<<v<<" ";
-	  Node1* temp=header[vernum];
+	  Node1* temp=header[v];
 	  while(temp!=nullptr)
 	  {
-		  if(visited[temp->dvertex]==0)
+		  if(visitednew[temp->dvertex]==0)
 		  {
 			  s.push(temp->dvertex);
-			  visited[temp->dvertex]=1;
+			  visitednew[temp->dvertex]=1;
 		  }
 		  temp=temp->next;
-
 	  }
-
   }
+  cout<<endl;
 }
 void Graph::display()
 {
@@ -148,16 +146,38 @@ void Graph::display()
 int main() {
 	int v,e;
 	int start;
-	cout<<"Enter the number of vertices: "<<endl;
+	cout<<"Enter the number of vertices: ";
 	cin>>v;
-	cout<<"Enter the number of edges: "<<endl;
+	cout<<"Enter the number of edges: ";
 	cin>>e;
+	int ch;
 	Graph g(v,e);
-	g.acceptgraph();
-	g.display();
-	cout<<"Enter the vertex you want to start traversing from :";
-	cin>>start;
-	g.BFS(start);
-	g.DFS(start);
+	do
+	{
+		cout<<"******MENU******\n1.Accept graph\n2.Display graph\n3.BFS\n4.DFS\n5.Exit\n";
+		cin>>ch;
+		switch(ch)
+		{
+		case 1:
+			g.acceptgraph();
+			break;
+		case 2:
+			g.display();
+			break;
+		case 3:
+			cout<<"Enter the starting vertex: ";
+			cin>>start;
+			g.BFS(start);
+			break;
+		case 4:
+			cout<<"Enter the starting vertex: ";
+			cin>>start;
+			g.DFS(start);
+			break;
+		case 5:
+		    cout<<"Exiting.....";
+			break;
+		}
+	} while (ch!=5);
 	return 0;
 }
