@@ -1,4 +1,10 @@
-//to implement prims and kruskals algorithm
+//============================================================================
+// Name        : Assignment7.cpp
+// Author      : Sharvi
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
+//============================================================================
 
 #include<iostream>
 using namespace std;
@@ -6,29 +12,39 @@ using namespace std;
 class Graph{
     int vernum;
     int edgenum;
-    int adj [100][100];
+    int **adj ;
     
     public:
     Graph()
     {
         vernum=0;
         edgenum=0;
+        adj=nullptr;
     }
     Graph(int v,int e)
     {
         vernum=v;
         edgenum=e;
+        adj=new int *[v];
+        for(int i=0;i<v;i++)
+        {
+        	adj[i]=new int[v];
+        	for(int j=0;j<v;j++)
+        	{
+        		adj[i][j]=0;//to avoid storing garbage values in the matrix
+        	}
+        }
         
     }
     void display();
     void acceptgraph();
+    void prims();
 };
-void acceptgraph(int v,int e)
+void Graph::acceptgraph()
 {
     int s,d;
-    int graph [v][e];
     int w;
-    for(int i=0;i<e;i++)
+    for(int i=0;i<edgenum;i++)
     {
         cout<<"Enter the source vertex: ";
         cin>>s;
@@ -36,7 +52,8 @@ void acceptgraph(int v,int e)
         cin>>d;
         cout<<"Enter the weight: ";
         cin>>w;
-        graph[s][d]=w;
-        graph[d][s]=w;    
+        adj[s][d]=w;
+        adj[d][s]=w;     
     }
 }
+
