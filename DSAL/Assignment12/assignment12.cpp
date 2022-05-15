@@ -37,111 +37,121 @@ class Student
 };
 
 class Fileops
-{   
-    private:
-        fstream file;
+{
     public:
-        void create();
-        void delete_record();
-        void display();
-
+    void create();
+    void display();
+    void deleterecord();
 };
+
 void Fileops::create()
-{   
+{
+    char ch;
+    ofstream fout;
     Student s;
-    char ch='y';
-    file.open("student.txt",ios::in|ios::out|ios::binary);
-    do{
-        cout<<"Enter Name: ";
-        cin>>s.name;
-        cout<<"Enter Roll: ";
-        cin>>s.roll;
-        cout<<"Enter Division: ";
-        cin>>s.division;
-        cout<<"Enter Address: ";
-        cin>>s.address;
-        file.write((char*)&s,sizeof(s));
-        cout<<"Do you want to continue?(y/n): ";
-        cin>>ch;
-    }while(ch=='y');
-    file.close();
-}
-void Fileops::delete_record()
-{   
-    int roll;
-    cout<<"Enter the roll number of student to be deleted: ";
-    cin>>roll;
-    file.open("student.txt",ios::in|ios::out,ios::binary);
-    file.seekg(0,ios::beg);
-    file.close();
-    while(!file.eof())
+    fout.open("student.txt",ios::out|ios::binary);
+    do
     {
-        file>>roll;
-        if(roll!=roll)
+       cout<<"Enter the name of the student: ";
+       cin>>s.name;
+       cout<<"Enter the roll number of the student: ";
+       cin>>s.roll;
+       cout<<"Enter the division of the student: ";
+       cin>>s.division;
+       cout<<"Enter the address of the student: ";
+       cin>>s.address;
+       fout.write((char*)&s,sizeof(s));
+       cout<<"Do you want to enter more records?(y/n): ";
+         cin>>ch;
+    }while(ch=='y'||ch=='Y');
+            
+    fout.close();
+}
+
+void Fileops::display()
+{
+    ifstream fin;
+    Student s;
+    fin.open("student.txt",ios::in|ios::binary);
+    while(fin.read((char*)&s,sizeof(s)))
+    {  
+        if(fin.eof())
         {
-            file<<roll<<" ";
+            break;
+        }
+        if(fin.fail())
+        {
+            cout<<"Error in reading file"<<endl;
+            break;
+        }
+        if(s.roll!=-1)
+        {
+            cout<<"Name: "<<s.name<<endl;
+            cout<<"Roll number: "<<s.roll<<endl;
+            cout<<"Division: "<<s.division<<endl;
+            cout<<"Address: "<<s.address<<endl;
         }
     }
-    file.close();
-    file.open("student.txt",ios::out);
-    file.close();
-    file.open("temp.txt",ios::in);
-    while(!file.eof())
-    {
-        file>>roll;
-        file<<roll<<" ";
-    }
-    file.close();
+    fin.close();
 }
-
+void Fileops::deleterecord()
+{
+    fstream f;
+    Student s;
+    int roll;
+    f.open("student.txt",ios::in|ios::out|ios::binary);
+    cout<<"Enter the roll number of the student to be deleted: ";
+    cin>>roll;
+    while(f.read((char*)&s,sizeof(s)))
+    {
+        if(f.eof())
+        {
+            break;
+        }
+        if(f.fail())
+        {
+            cout<<"Error in reading file"<<endl;
+            break;
+        }
+        if(s.roll==roll)
+        {
+            s.roll=-1;
+            f.seekp(-1*sizeof(s),ios::cur);
+            f.write((char*)&s,sizeof(s));
+            break;
+        }
+    }
+    f.close();
+}
 
 int main()
 {
-    int ch;
+    int choice;
     Fileops f;
-    Student s;
     do
     {
-        cout<<"1. Add student"<<endl;
-        cout<<"2. Delete student"<<endl;
-        cout<<"3. Search student"<<endl;
-        cout<<"4. Display student"<<endl;
-        cout<<"5. Display all student"<<endl;
-        cout<<"6. Exit"<<endl;
+        cout<<"1. Create a file"<<endl;
+        cout<<"2. Display the file"<<endl;
+        cout<<"3. Delete a record"<<endl;
+        cout<<"4. Exit"<<endl;
         cout<<"Enter your choice: ";
-        cin>>ch;
-        switch(ch)
+        cin>>choice;
+        switch(choice)
         {
             case 1:
-                cout<<"Enter the details of student: "<<endl;
-                cout<<"Roll: ";
-                cin>>s.roll;
-                cout<<"Name: ";
-                cin>>s.name;
-                cout<<"Division: ";
-                cin>>s.division;
-                cout<<"Address: ";
-                cin>>s.address;
-                f.add(s);
+                f.create();
                 break;
             case 2:
-                f.delete_record();
-                break;
-            case 3:
-                f.search();
-                break;
-            case 4:
                 f.display();
                 break;
-            case 5:
-                f.display_all();
+            case 3:
+                f.deleterecord();
                 break;
-            case 6:
+            case 4:
                 break;
             default:
                 cout<<"Invalid choice"<<endl;
         }
-    }while(ch!=6);
+    }while(choice!=4);
     return 0;
 }
-
