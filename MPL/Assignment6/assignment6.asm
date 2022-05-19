@@ -38,13 +38,12 @@ mswoutputlen: equ $-mswoutput
 section .bss
 
   gdt resd 1
-      resw 1
   ldt resw 1
   idt resd 1
-      resw 1
-  tr resw 1 
+  tr resw 1
+  value resb 4
 
-  cr0_data resd 1 ;machine status word
+  cr0_data resd 1       ;machine status word
   
   buffer resb 04
 
@@ -52,11 +51,11 @@ section .text
 global _start
 _start:
 
-    smsw eax ; reading the control register 1
+    smsw eax           ; reading the control register 1
     mov [cr0_data],rax ; storing the control register 1 value in cr0_data
      
-    bt rax,1 ; checking if the bit 1 is set
-    ; if the bit 1 is set then the machine is in protected mode
+    bt rax,1           ; checking if the bit 1 is set
+                       ; if the bit 1 is set then the machine is in protected mode
 
     jc protected
     rwe 01,realmode,reallen
@@ -64,28 +63,27 @@ _start:
 
     protected: rwe 01,protectedmode,protectedlen
 
-    next: sgdt [gdt] ; storing the GDT address in gdt
-
-    sldt [ldt] ; storing the LDT address in ldt
-    sidt [idt] ; storing the IDT address in idt
-    str [tr] ; storing the TR address in tr
-    rwe 01,gdtcontents,gdtcontentslen
-
+    next: sgdt [gdt]    ; storing the GDT address in gdt
+    
     mov bx,[gdt+4]
     call display
-
+    
     mov bx,[gdt +2]
     call display
 
     mov bx,[gdt]
     call display
-
+    
     rwe 01,ldtcontents,ldtcontentslen
+
+    sldt [ldt]           ; storing the LDT address in ldt
 
     mov bx,[ldt]
     call display
 
     rwe 01,idtcontents,idtcontentslen
+
+    sidt [idt]          ; storing the IDT address in idt
 
     mov bx,[idt+4]
     call display
@@ -98,6 +96,8 @@ _start:
 
     rwe 01,trcontents,trcontentslen
 
+    str [tr]          ; storing the TR address in tr
+  
     mov bx,[tr]
     call display
 
