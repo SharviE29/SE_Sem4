@@ -76,7 +76,7 @@ void TelephoneDict::createrecordwithRepl(long long int n,int a)
          break;
       }
       else{
-          int newIndex=hashfunction(h[index].teleno);
+          int newIndex=hashfunction(h[index].id);
           if(index!=newIndex && index!=hashfunction(n))
           {
              long long int tempkey=h[index].teleno;
