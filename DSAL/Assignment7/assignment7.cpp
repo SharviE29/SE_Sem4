@@ -59,63 +59,52 @@ void Graph::displaygraph()
     for(int i=0;i<vertices;i++)
     {
         for(int j=0;j<vertices;j++)
-        {
-            cout<<i<<"--"<<j<<":"<<a[i][j]<<" ";
+        {   
+              cout<<a[i][j]<<" ";
         }
         cout<<endl;
     }
 }
 void Graph::prims()
 {
-    int min,i,j,k,min_index,u,v;
-    int visited[10];
-    int distance[10];
-    for(i=0;i<vertices;i++)
+    int enumber=0;
+    int visited[vertices];
+    for(int i=0;i<vertices;i++)
     {
-        visited[i] = 0;
-        distance[i] = a[0][i];
+        visited[i]=false;
     }
-    visited[0] = 1;
-    distance[0] = 0;
-    for(i=1;i<vertices;i++)
+    visited[0]=true;
+    int minimum=9999999;
+    int r=0;
+    int c=0;
+    while(enumber<vertices-1)//condition for a minimum spanning tree
     {
-        min = 99999;
-        for(j=0;j<vertices;j++)
+        minimum=9999999;
+        r=0;
+        c=0;
+
+        for(int i=0;i<vertices;i++)
         {
-            if(visited[j] == 0 && distance[j] < min)
+            if(visited[i])
             {
-                min = distance[j];
-                min_index = j;
+                for(int j=0;j<vertices;j++)
+                {
+                    if(!visited[j] && a[i][j])
+                    {
+                        if(minimum>a[i][j])
+                        {
+                            minimum=a[i][j];
+                            r=i;
+                            c=j;
+                        }
+                    }
+                }
             }
         }
-        visited[min_index] = 1;
-        for(k=0;k<vertices;k++)
-        {
-            if(visited[k] == 0 && a[min_index][k] < distance[k])
-            {
-                distance[k] = a[min_index][k];
-            }
-        }
-    }
-    for(i=0;i<vertices;i++)
-    {
-        for(j=0;j<vertices;j++)
-        {
-            cout<<i<<"--"<<j<<":"<<a[i][j]<<" ";
-        }
+        cout<<r<<"--"<<c<<":"<<a[r][c];
         cout<<endl;
-    }
-    cout<<"The minimum spanning tree is: "<<endl;
-    for(i=0;i<vertices;i++)
-    {
-        for(j=0;j<vertices;j++)
-        {
-            if(a[i][j] != 0)
-            {
-                cout<<i<<"--"<<j<<":"<<a[i][j]<<" ";
-            }
-        }
-        cout<<endl;
+        visited[c]=true;
+        enumber++;
     }
 }
 
