@@ -40,31 +40,38 @@ rep movsb ;repeat prefix
 
 ;to print the source array indexes and values
 
-rwe 01,sourceadd,len1
+rwe 01,sourceadd,len1 ;before block transfer
 mov byte[count],04h
 mov rsi,srcarr
-mov qword[vp],rsi ;to take the address of the variable and print it via htoa procedure
-push rsi
-call htoa
-pop rsi
-mov rax,[rsi] ; to take the contents of the pointer and print it via htoa procedure
-mov qword[vp],rax
-push rsi
-call htoa
-pop rsi
+again:  mov rbx,rsi ;to take the address of the variable and print it via htoa procedure
+        push rsi
+        call htoa
+        pop rsi
+        mov rdx,[rsi] ; to take the contents of the pointer and print it via htoa procedure
+        push rsi
+        call htoa
+        pop rsi
+        inc rsi
+        dec byte[count]
+        jnz again
 
 ;to print the destination array indexes and values
 
+rwe 01,destadd,len1 ;before block transfer
+mov byte[count],04h
 mov rsi,dstarr
-mov qword[vp],rsi ;to take the address of the variable and print it via htoa procedure
-push rsi
-call htoa
-pop rsi
-mov rax,[rsi] ; to take the contents of the pointer and print it via htoa procedure
-mov qword[vp],rax
-push rsi
-call htoa
-pop rsi 
+again2: mov rbx,rsi ;to take the address of the variable and print it via htoa procedure
+        push rsi
+        call htoa
+        pop rsi
+        mov rdx,[rsi] ; to take the contents of the pointer and print it via htoa procedure
+        push rsi
+        call htoa
+        pop rsi
+        inc rsi
+        dec byte[count]
+        jnz again2
+
 mov rax,60
 mov rdi,00
 syscall
