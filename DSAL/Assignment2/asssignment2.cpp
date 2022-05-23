@@ -147,7 +147,7 @@ Node* BST::deleteword(Node *t,string w)
   //Node *t=root;
   Node *p;
   Node *r;
-  if(root==nullptr)
+  if(t==nullptr)
   {
       cout<<"No node to delete!"<<endl;
       return nullptr;
@@ -161,7 +161,10 @@ Node* BST::deleteword(Node *t,string w)
       t->rchild=deleteword(t->rchild,w);
   }
   else// the word is found
-  {
+  {   
+
+      // no children
+      
       if(t->lchild==nullptr && t->rchild==nullptr)
       {   
           cout<<t->word<<" is deleted!"<<endl;

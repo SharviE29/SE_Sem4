@@ -53,9 +53,7 @@ public:
 		   cin>>sour;
 		   cout<<"Enter the destination vertex: ";
 		   cin>>dest;
-		   //Node1 *temp=new Node1(sour);
 		   Node1 *destNode1=new Node1(dest);
-		   //temp->next=destNode1;
 		   if(header[sour]==nullptr)
 		   {
 			   header[sour]=destNode1;
@@ -78,7 +76,7 @@ public:
 void Graph::BFS(int startver)
 {
   Queue q(1000);
-  int *visited=new int[vernum];
+  int *visited=new int[vernum];//creating a visited array 
   for(int i=0;i<vernum;i++)
 	  {
 	     visited[i]=0;
@@ -92,10 +90,10 @@ void Graph::BFS(int startver)
 	  Node1* temp=header[v];
 	  while(temp!=nullptr)
 	  {
-		  if(visited[temp->dvertex]==0)
+		  if(visited[temp->dvertex]==0)//if its not been visited before
 		  {
 			  q.enqueue(temp->dvertex);
-			  visited[temp->dvertex]=1;
+			  visited[temp->dvertex]=1;// now that its been visited
 		  }
 		  temp=temp->next;
 	  }
