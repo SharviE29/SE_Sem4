@@ -10,49 +10,91 @@ syscall
 
 
 section .data
-
+invalid db "Invalid number of arguments"
+len1 equ $-invalid
+newline db 10
+count db 05
+count1 db 2
 num db 00h
-fact db "Enter the number to find the factorial of: "
+colon db ":"
 
-len1 equ $-fact
-resultstring db "The factorial is :"
-len2 equ $-resultstring
 
 section .bss
-dispnum resb 16
-result resb 4
-temp resb 4
-
+asciiarr resb 16
+global _start:
 section .text
-global _start
 _start:
+         
 
-rwe 01,fact,len1
-rwe 00,temp,3 ; accept the number
-
-call convert
-mov [num],dl
-rwe 01,resultstring,len2
-xor 
-
+              pop rax
+              cmp rax,02h
+              jz goahead
+              rw 01,invalid,len1
+              jmp exit
 
 
+goahead:      pop rax
+              pop rax
+              mov al,[rax]
+              mov byte[num],al
+              rwe 01,num,01h
+              rwe 01,newline,02h 
+              sub byte[num],30h
+              mov eax,dword[num]
+              cmp byte[num],01h
+              je factorial1
+factorial:    dec byte[num]
+              mul dword[num]
+              cmp byte[num],01h
+              je endfactorial
+              jmp factorial
 
+factorial1:   mul dword[num]    
 
-convert: ; ascii to hex
-        mov rsi,temp
-        mov cl,02h
-        xor rax,rax
-        xor rdx,rdx
-first: rol dl,04h
-       mov al,[rsi]
-       cmp al,39h
-       jbe last
-       sub al,07h
-last : sub al,30h
-       add dl,al
-       inc rsi       
-       dec cl
-       jnz first
+endfactorial: call hextoascii16
 
-ret       
+exit: mov rax,60
+      mov rdi,00
+      syscall
+
+hextoascii16:
+
+             mov byte[count1],16h
+             mov rsi,asciiarr
+again1:      rol rax,04h
+             mov rbx,rax
+             cmp rbx,09h
+             jbe next
+             add rbx,07h
+next:        add rbx,30h    
+             mov [rsi],rbx
+             inc rsi
+             dec byte[count1]
+             jnz again1
+
+             rw 01,asciiarr,010h
+             ret
+
+hextoAscii:
+	mov byte[count1], 02h
+	mov rsi, asciiarr
+	mov al, dl
+again2:rol al, 04h
+	mov bl, al
+	and bl, 0Fh
+	cmp bl, 09h
+	jbe l2
+	add bl, 07h
+l2:	add bl, 30h
+	
+	
+	mov [rsi],bl
+	inc rsi
+	dec byte[count1]
+	jnz again2
+	
+	rw 01, asciiarr, 02h
+	rw 1, newline, 02h
+ret
+
+         

@@ -24,7 +24,7 @@ public:
 	{
 		data=x;
 		lchild=rchild=nullptr;
-	    lflag=rflag=false;
+	    lflag=rflag=false;//node
 	}
 	friend class TBT;
 };
@@ -60,7 +60,7 @@ void TBT::insert(int key)
 			{
 					if(p->data >key)//modify the left child of the tree
 					{
-						if(p->lflag==1)// the left child of the tree is a node 
+						if(p->lflag==false)// the left child of the tree is a node 
 						{
 							p=p->lchild;
 						}
@@ -70,12 +70,13 @@ void TBT::insert(int key)
 							temp->lchild=p->lchild;
 							temp->rchild=p;
 							p->lchild=temp;
-							p->lflag=1;
+							p->lflag=false;//make it a node
+							break;
 						}
 					}
 					else //modify the right child of the tree
 					{
-						if(p->rflag==1)
+						if(p->rflag==false)
 						{
 								p=p->rchild;
 						}
@@ -85,7 +86,8 @@ void TBT::insert(int key)
 							temp->rchild=p->rchild;
 							temp->lchild=p;
 							p->rchild=temp;
-							p->rflag=1;
+							p->rflag=false;
+							break;
 						}
 					}
 			}
@@ -95,28 +97,26 @@ void TBT::insert(int key)
 void TBT::display()//inorder display
 {
   Node *p=root;
-  while(p->rchild!=header)
+  if(root==nullptr)
   {
-	  while(p->lflag==1)
+	  cout<<"Tree is empty";
+	  return ;
+  }
+  while(p!=header)
+  {
+	  while(p->lflag==false)//node
 	  {
 		  p=p->lchild;
 	  }
-	  cout<<p->data<<endl;
-	  if(p->rflag==1)
+	  cout<<p->data<<" ";
+	  while(p->rflag==true && p->rchild!=header)
 	  {
 		  p=p->rchild;
+		  cout<<p->data<<" ";
 	  }
-	  else
-	  {
-		  p=p->rchild;
-		  cout<<p->data<<endl;
-		  p=p->rchild;
-	  }
+	  p=p->rchild;
   }
-//  while(p)
-//  {
-//
-//  }
+
 }
 int main()
 {
